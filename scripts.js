@@ -1,11 +1,12 @@
 let currentCellIndex = null;
+let canvasDataURL = null;
 
 function handleCellClick(index) {
     currentCellIndex = index;
     const cell = document.getElementsByClassName('cell')[index];
     if (cell.querySelector('img')) {
         if (confirm('是否要移除目前的圖片，以便上傳新圖片？')) {
-            cell.innerHTML = '';
+            cell.innerHTML = '<span class="placeholder">' + getPlaceholderText(index) + '</span>';
             document.getElementById('imageUpload').click();
         }
     } else {
@@ -118,20 +119,60 @@ function downloadGrid() {
 }
 
 function finalizeDownload(canvas) {
+    canvasDataURL = canvas.toDataURL('image/png');
     const link = document.createElement('a');
     link.download = 'nine-square-grid.png';
-    const dataURL = canvas.toDataURL('image/png');
-    link.href = dataURL;
+    link.href = canvasDataURL;
     
     // 嘗試下載，如果失敗則在新視窗開啟圖片
+    let downloadSuccessful = false;
     try {
         link.click();
+        downloadSuccessful = true;
     } catch (e) {
-        if (confirm('無法自動下載圖片，是否要在新視窗中開啟圖片？')) {
+        downloadSuccessful = false;
+    }
+    
+    if (!downloadSuccessful) {
+        alert('無法自動下載圖片，請使用其他瀏覽器測試，或選擇以下選項。');
+        if (confirm('是否要在新視窗中開啟圖片？')) {
             const newWindow = window.open();
-            newWindow.document.write(`<img src="${dataURL}" alt="Nine Square Grid" style="width: 100%; height: auto;">`);
+            if (newWindow) {
+                newWindow.document.write(`<img src="${canvasDataURL}" alt="Nine Square Grid" style="width: 100%; height: auto;">`);
+            } else {
+                alert('無法開啟新視窗，請檢查您的瀏覽器設定。');
+            }
         }
     }
+}
+
+function viewGrid() {
+    if (canvasDataURL) {
+        const newWindow = window.open();
+        if (newWindow) {
+            newWindow.document.write(`<img src="${canvasDataURL}" alt="Nine Square Grid" style="width: 100%; height: auto;">`);
+        } else {
+            alert('無法開啟新視窗，請檢查您的瀏覽器設定。');
+        }
+    } else {
+        alert('請先點擊「下載九宮格」生成圖片，然後再使用「在網頁查看九宮格」功能。');
+        downloadGrid();
+    }
+}
+
+function getPlaceholderText(index) {
+    const placeholders = [
+        '動物<br>Animal',
+        '地方<br>Place',
+        '植物<br>Plant',
+        '角色<br>Character',
+        '季節<br>Season',
+        '愛好<br>Hobby',
+        '食物<br>Food',
+        '顏色<br>Color',
+        '飲料<br>Drink'
+    ];
+    return placeholders[index];
 }
 
 // 注意：HEIC圖片格式在某些瀏覽器中可能無法直接顯示。如果您上傳HEIC格式的圖片，
