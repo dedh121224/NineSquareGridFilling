@@ -1,5 +1,16 @@
 let currentCellIndex = null;
 let canvasDataURL = null;
+let customLabels = [
+    { zh: '動物', en: 'Animal' },
+    { zh: '地方', en: 'Place' },
+    { zh: '植物', en: 'Plant' },
+    { zh: '角色', en: 'Character' },
+    { zh: '季節', en: 'Season' },
+    { zh: '愛好', en: 'Hobby' },
+    { zh: '食物', en: 'Food' },
+    { zh: '顏色', en: 'Color' },
+    { zh: '飲料', en: 'Drink' }
+];
 
 function handleCellClick(index) {
     currentCellIndex = index;
@@ -147,32 +158,39 @@ function finalizeDownload(canvas) {
 }
 
 function viewGrid() {
-    if (canvasDataURL) {
+    if (!canvasDataURL) {
+        downloadGrid();
+    } else {
         const newWindow = window.open();
         if (newWindow) {
             newWindow.document.write(`<img src="${canvasDataURL}" alt="Nine Square Grid" style="width: 100%; height: auto;">`);
         } else {
             alert('無法開啟新視窗，請檢查您的瀏覽器設定。');
         }
-    } else {
-        alert('請先點擊「下載九宮格」生成圖片，然後再使用「在網頁查看九宮格」功能。');
-        downloadGrid();
     }
 }
 
 function getPlaceholderText(index) {
-    const placeholders = [
-        '動物<br>Animal',
-        '地方<br>Place',
-        '植物<br>Plant',
-        '角色<br>Character',
-        '季節<br>Season',
-        '愛好<br>Hobby',
-        '食物<br>Food',
-        '顏色<br>Color',
-        '飲料<br>Drink'
-    ];
-    return placeholders[index];
+    return customLabels[index].zh + '<br>' + customLabels[index].en;
+}
+
+function updateGridLabels() {
+    const zhInputs = document.querySelectorAll('.custom-labels-zh input');
+    const enInputs = document.querySelectorAll('.custom-labels-en input');
+    
+    for (let i = 0; i < customLabels.length; i++) {
+        customLabels[i].zh = zhInputs[i].value.trim() || customLabels[i].zh;
+        customLabels[i].en = enInputs[i].value.trim() || customLabels[i].en;
+    }
+    
+    // 更新九宮格中的文字
+    const cells = document.getElementsByClassName('cell');
+    for (let i = 0; i < cells.length; i++) {
+        const cell = cells[i];
+        if (!cell.querySelector('img')) {
+            cell.innerHTML = '<span class="placeholder">' + getPlaceholderText(i) + '</span>';
+        }
+    }
 }
 
 // 注意：HEIC圖片格式在某些瀏覽器中可能無法直接顯示。如果您上傳HEIC格式的圖片，

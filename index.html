@@ -22,6 +22,35 @@
         </div>
         <button class="download-btn" onclick="downloadGrid()">下載九宮格</button>
         <button class="view-btn" onclick="viewGrid()">在網頁查看九宮格</button>
+        
+        <div class="custom-labels-container">
+            <h2>自訂九宮格文字</h2>
+            <div class="custom-labels-zh">
+                <h3>中文標籤</h3>
+                <input type="text" id="zh-label-0" placeholder="動物" maxlength="10">
+                <input type="text" id="zh-label-1" placeholder="地方" maxlength="10">
+                <input type="text" id="zh-label-2" placeholder="植物" maxlength="10">
+                <input type="text" id="zh-label-3" placeholder="角色" maxlength="10">
+                <input type="text" id="zh-label-4" placeholder="季節" maxlength="10">
+                <input type="text" id="zh-label-5" placeholder="愛好" maxlength="10">
+                <input type="text" id="zh-label-6" placeholder="食物" maxlength="10">
+                <input type="text" id="zh-label-7" placeholder="顏色" maxlength="10">
+                <input type="text" id="zh-label-8" placeholder="飲料" maxlength="10">
+            </div>
+            <div class="custom-labels-en">
+                <h3>英文標籤</h3>
+                <input type="text" id="en-label-0" placeholder="Animal" maxlength="15">
+                <input type="text" id="en-label-1" placeholder="Place" maxlength="15">
+                <input type="text" id="en-label-2" placeholder="Plant" maxlength="15">
+                <input type="text" id="en-label-3" placeholder="Character" maxlength="15">
+                <input type="text" id="en-label-4" placeholder="Season" maxlength="15">
+                <input type="text" id="en-label-5" placeholder="Hobby" maxlength="15">
+                <input type="text" id="en-label-6" placeholder="Food" maxlength="15">
+                <input type="text" id="en-label-7" placeholder="Color" maxlength="15">
+                <input type="text" id="en-label-8" placeholder="Drink" maxlength="15">
+            </div>
+            <button class="update-btn" onclick="updateGridLabels()">更新九宮格文字</button>
+        </div>
     </div>
     <input type="file" id="imageUpload" accept="image/jpeg,image/png" onchange="uploadImage()" style="display: none;">
     <script src="scripts.js"></script>
