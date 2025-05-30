@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>九宮格圖片填充</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>九宮格圖片填充</h1>
+        <div class="grid">
+            <div class="cell" onclick="openModal(0)"></div>
+            <div class="cell" onclick="openModal(1)"></div>
+            <div class="cell" onclick="openModal(2)"></div>
+            <div class="cell" onclick="openModal(3)"></div>
+            <div class="cell" onclick="openModal(4)"></div>
+            <div class="cell" onclick="openModal(5)"></div>
+            <div class="cell" onclick="openModal(6)"></div>
+            <div class="cell" onclick="openModal(7)"></div>
+            <div class="cell" onclick="openModal(8)"></div>
+        </div>
+        <button class="download-btn" onclick="downloadGrid()">下載九宮格</button>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>上傳圖片</h2>
+            <input type="file" id="imageUpload" accept="image/*">
+            <button onclick="uploadImage()">上傳</button>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
