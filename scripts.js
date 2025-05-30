@@ -15,6 +15,16 @@ function uploadImage() {
     const fileInput = document.getElementById('imageUpload');
     const file = fileInput.files[0];
     if (file && currentCellIndex !== null) {
+        const fileType = file.type.toLowerCase();
+        const acceptedTypes = ['image/jpeg', 'image/png'];
+        
+        if (!acceptedTypes.includes(fileType)) {
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            alert(`您上傳的檔案格式為 ${fileExtension.toUpperCase()}，目前僅支援JPEG/JPG和PNG格式。請將檔案轉換為JPEG/JPG或PNG格式後再上傳。`);
+            fileInput.value = '';
+            return;
+        }
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             const cell = document.getElementsByClassName('cell')[currentCellIndex];
@@ -23,6 +33,7 @@ function uploadImage() {
         };
         reader.onerror = function() {
             alert('無法讀取圖片檔案，請確保檔案格式正確。');
+            fileInput.value = '';
         };
         reader.readAsDataURL(file);
     }
@@ -91,5 +102,6 @@ function finalizeDownload(canvas) {
 }
 
 // 注意：HEIC圖片格式在某些瀏覽器中可能無法直接顯示。如果您上傳HEIC格式的圖片，
-// 建議先將其轉換為JPEG或PNG格式再上傳。未來可以考慮添加對HEIC格式的支援，
+// 建議先將其轉換為JPEG/JPG或PNG格式再上傳。未來可以考慮添加對HEIC格式的支援，
 // 例如使用第三方庫來轉換HEIC圖片。
+// 另外，JPEG和JPG是相同的格式，程式碼中的 'image/jpeg' 涵蓋了這兩種副檔名。
