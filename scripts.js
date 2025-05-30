@@ -120,8 +120,18 @@ function downloadGrid() {
 function finalizeDownload(canvas) {
     const link = document.createElement('a');
     link.download = 'nine-square-grid.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    const dataURL = canvas.toDataURL('image/png');
+    link.href = dataURL;
+    
+    // 嘗試下載，如果失敗則在新視窗開啟圖片
+    try {
+        link.click();
+    } catch (e) {
+        if (confirm('無法自動下載圖片，是否要在新視窗中開啟圖片？')) {
+            const newWindow = window.open();
+            newWindow.document.write(`<img src="${dataURL}" alt="Nine Square Grid" style="width: 100%; height: auto;">`);
+        }
+    }
 }
 
 // 注意：HEIC圖片格式在某些瀏覽器中可能無法直接顯示。如果您上傳HEIC格式的圖片，
