@@ -10,25 +10,19 @@
     <div class="container">
         <h1>九宮格圖片填充</h1>
         <div class="grid">
-            <div class="cell" onclick="openModal(0)"></div>
-            <div class="cell" onclick="openModal(1)"></div>
-            <div class="cell" onclick="openModal(2)"></div>
-            <div class="cell" onclick="openModal(3)"></div>
-            <div class="cell" onclick="openModal(4)"></div>
-            <div class="cell" onclick="openModal(5)"></div>
-            <div class="cell" onclick="openModal(6)"></div>
-            <div class="cell" onclick="openModal(7)"></div>
-            <div class="cell" onclick="openModal(8)"></div>
+            <div class="cell" onclick="handleCellClick(0)"></div>
+            <div class="cell" onclick="handleCellClick(1)"></div>
+            <div class="cell" onclick="handleCellClick(2)"></div>
+            <div class="cell" onclick="handleCellClick(3)"></div>
+            <div class="cell" onclick="handleCellClick(4)"></div>
+            <div class="cell" onclick="handleCellClick(5)"></div>
+            <div class="cell" onclick="handleCellClick(6)"></div>
+            <div class="cell" onclick="handleCellClick(7)"></div>
+            <div class="cell" onclick="handleCellClick(8)"></div>
         </div>
         <button class="download-btn" onclick="downloadGrid()">下載九宮格</button>
     </div>
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>上傳圖片</h2>
-            <input type="file" id="imageUpload" accept="image/jpeg,image/png" onchange="uploadImage()">
-        </div>
-    </div>
+    <input type="file" id="imageUpload" accept="image/jpeg,image/png" onchange="uploadImage()" style="display: none;">
     <script src="scripts.js"></script>
 </body>
 </html>

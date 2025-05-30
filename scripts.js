@@ -1,14 +1,16 @@
 let currentCellIndex = null;
 
-function openModal(index) {
+function handleCellClick(index) {
     currentCellIndex = index;
-    document.getElementById('modal').style.display = 'block';
-    document.getElementById('imageUpload').value = '';
-}
-
-function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-    currentCellIndex = null;
+    const cell = document.getElementsByClassName('cell')[index];
+    if (cell.querySelector('img')) {
+        if (confirm('是否要移除目前的圖片，以便上傳新圖片？')) {
+            cell.innerHTML = '';
+            document.getElementById('imageUpload').click();
+        }
+    } else {
+        document.getElementById('imageUpload').click();
+    }
 }
 
 function uploadImage() {
@@ -29,7 +31,6 @@ function uploadImage() {
         reader.onload = function(e) {
             const cell = document.getElementsByClassName('cell')[currentCellIndex];
             cell.innerHTML = `<img src="${e.target.result}" alt="Uploaded Image">`;
-            closeModal();
         };
         reader.onerror = function() {
             alert('無法讀取圖片檔案，請確保檔案格式正確。');
@@ -40,7 +41,6 @@ function uploadImage() {
 }
 
 function downloadGrid() {
-    const grid = document.querySelector('.grid');
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const targetSize = 1080; // 設定目標解析度為1080x1080
@@ -63,7 +63,30 @@ function downloadGrid() {
             image.crossOrigin = "Anonymous";
             image.src = img.src;
             image.onload = function() {
-                ctx.drawImage(image, x, y, cellSize, cellSize);
+                // 確保圖片裁切填滿格子
+                const width = image.width;
+                const height = image.height;
+                let drawX = x;
+                let drawY = y;
+                let drawWidth = cellSize;
+                let drawHeight = cellSize;
+                let sourceX = 0;
+                let sourceY = 0;
+                let sourceWidth = width;
+                let sourceHeight = height;
+                
+                const aspectRatio = width / height;
+                const cellAspectRatio = cellSize / cellSize;
+                
+                if (aspectRatio < cellAspectRatio) {
+                    sourceHeight = width / cellAspectRatio;
+                    sourceY = (height - sourceHeight) / 2;
+                } else {
+                    sourceWidth = height * cellAspectRatio;
+                    sourceX = (width - sourceWidth) / 2;
+                }
+                
+                ctx.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, drawX, drawY, drawWidth, drawHeight);
                 loadedImages++;
                 if (loadedImages === Array.from(cells).filter(c => c.querySelector('img')).length) {
                     finalizeDownload(canvas);
