@@ -32,19 +32,19 @@ function downloadGrid() {
     const grid = document.querySelector('.grid');
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    const gridRect = grid.getBoundingClientRect();
+    const targetSize = 1080; // 設定目標解析度為1080x1080
     
-    canvas.width = gridRect.width;
-    canvas.height = gridRect.height;
+    canvas.width = targetSize;
+    canvas.height = targetSize;
     
     const cells = document.getElementsByClassName('cell');
+    const cellSize = targetSize / 3; // 九宮格每格的大小
     let loadedImages = 0;
     
     for (let i = 0; i < cells.length; i++) {
         const cell = cells[i];
-        const cellRect = cell.getBoundingClientRect();
-        const x = cellRect.left - gridRect.left;
-        const y = cellRect.top - gridRect.top;
+        const x = (i % 3) * cellSize;
+        const y = Math.floor(i / 3) * cellSize;
         const img = cell.querySelector('img');
         
         if (img) {
@@ -52,7 +52,7 @@ function downloadGrid() {
             image.crossOrigin = "Anonymous";
             image.src = img.src;
             image.onload = function() {
-                ctx.drawImage(image, x, y, cellRect.width, cellRect.height);
+                ctx.drawImage(image, x, y, cellSize, cellSize);
                 loadedImages++;
                 if (loadedImages === Array.from(cells).filter(c => c.querySelector('img')).length) {
                     finalizeDownload(canvas);
@@ -60,10 +60,10 @@ function downloadGrid() {
             };
             image.onerror = function() {
                 ctx.fillStyle = '#fff';
-                ctx.fillRect(x, y, cellRect.width, cellRect.height);
+                ctx.fillRect(x, y, cellSize, cellSize);
                 ctx.strokeStyle = '#ccc';
                 ctx.lineWidth = 2;
-                ctx.strokeRect(x, y, cellRect.width, cellRect.height);
+                ctx.strokeRect(x, y, cellSize, cellSize);
                 loadedImages++;
                 if (loadedImages === Array.from(cells).filter(c => c.querySelector('img')).length) {
                     finalizeDownload(canvas);
@@ -71,10 +71,10 @@ function downloadGrid() {
             };
         } else {
             ctx.fillStyle = '#fff';
-            ctx.fillRect(x, y, cellRect.width, cellRect.height);
+            ctx.fillRect(x, y, cellSize, cellSize);
             ctx.strokeStyle = '#ccc';
             ctx.lineWidth = 2;
-            ctx.strokeRect(x, y, cellRect.width, cellRect.height);
+            ctx.strokeRect(x, y, cellSize, cellSize);
         }
     }
     
